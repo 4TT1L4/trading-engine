@@ -64,9 +64,7 @@ Import it and run requests against: http://localhost:8080
 
 Automated tests are executed during the Docker build.
 
-Rebuild the image to run tests:
-
-`make rebuild`
+Rebuild the image to run tests: `make rebuild`
 
 The build fails if any test fails.
 
