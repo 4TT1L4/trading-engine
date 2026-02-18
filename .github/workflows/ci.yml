@@ -8,8 +8,6 @@ on:
 jobs:
   build-image:
     runs-on: ubuntu-latest
-    env:
-      EXCHANGE_FILL_WORKER_ENABLED: "false"
 
     steps:
       - name: Checkout
@@ -18,7 +16,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Optional but nice: speeds up repeated builds
       - name: Cache Docker layers
         uses: actions/cache@v4
         with:
@@ -27,17 +24,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build Docker image (runs tests during build)
+      - name: Build Docker image (runs tests during build, show full logs)
         uses: docker/build-push-action@v6
+        env:
+          BUILDKIT_PROGRESS: plain
         with:
           context: ./app
           file: ./app/Dockerfile
           push: false
           tags: trading-engine:ci
+          build-args: |
+            EXCHANGE_FILL_WORKER_ENABLED=false
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
-      # Move cache (workaround for cache-to not overwriting)
       - name: Move build cache
         run: |
           rm -rf /tmp/.buildx-cache

@@ -104,4 +104,9 @@ class SmokeTest {
         assertThat(accounts).isNotEmpty();
         assertThat(orders).isNotEmpty();
     }
+    
+    @Test
+    void shouldFail() {
+        fail("Intentional failure to verify CI and Docker build");
+    }
 }

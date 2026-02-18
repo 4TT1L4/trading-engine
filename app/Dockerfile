@@ -1,6 +1,9 @@
 # ---------- Build stage ----------
 FROM gradle:8.7-jdk21 AS builder
 
+ARG EXCHANGE_FILL_WORKER_ENABLED=true
+ENV EXCHANGE_FILL_WORKER_ENABLED=$EXCHANGE_FILL_WORKER_ENABLED
+
 WORKDIR /app
 COPY build.gradle settings.gradle ./
 COPY gradle ./gradle
