@@ -34,7 +34,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('app/**/*.gradle*', 'app/**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
+      - name: Make gradlew executable
+        working-directory: app
+        run: chmod +x gradlew
       - name: Build + Sonar analysis
         working-directory: app
         env:
