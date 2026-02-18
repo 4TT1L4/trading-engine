@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+echo "Gradle wrapper script not included in this scaffold."
+echo "If you want ./gradlew, run in ./app:"
+echo "  gradle wrapper --gradle-version 8.7"
+echo "Then:"
+echo "  ./gradlew test"
+echo "  ./gradlew bootRun"
+exit 1

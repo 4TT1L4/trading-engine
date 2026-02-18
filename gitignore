@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IntelliJ / IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Mac / Windows
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Spring Boot
+*.pid
+*.seed
+*.hprof
+
+# Environment
+.env
+.env.*
+
+# Docker
+docker-compose.override.yml
+
+# Insomnia / local exports
+.insomnia/
+
+# Generated files
+target/
+dist/

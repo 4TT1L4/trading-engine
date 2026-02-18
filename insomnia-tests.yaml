@@ -1,0 +1,253 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1734427646587
+  modified: 1734427646587
+  description: ""
+collection:
+  - url: localhost:8080/api/accounts
+    name: GET ACCOUNTS
+    meta:
+      id: req_34e48162ca76451a841ebbe65a6dabf7
+      created: 1734427680168
+      modified: 1771437126733
+      isPrivate: false
+      description: ""
+      sortKey: -1734427680168
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/10.2.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/api/accounts
+    name: POST ACCOUNT (ALICE)
+    meta:
+      id: req_7c06ad9f83aa47218e292113787395fe
+      created: 1771437139419
+      modified: 1771437277319
+      isPrivate: false
+      description: ""
+      sortKey: -1734427680068
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "Alice",
+          "usdBalance": 100000
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        // save to collection variable
+        insomnia.collectionVariables.set("alice_id", json.id);
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/api/accounts
+    name: POST ACCOUNT (BOB)
+    meta:
+      id: req_de76430fccd7459c8965d205e52632ff
+      created: 1771437198977
+      modified: 1771437271180
+      isPrivate: false
+      description: ""
+      sortKey: -1734427679968
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "Bob",
+          "usdBalance": 0
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        // save to collection variable
+        insomnia.collectionVariables.set("bob_id", json.id);
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/accounts/{{bob_id}}
+    name: GET ACCOUNTS/BOB
+    meta:
+      id: req_c2b56cd5d6534abcb639b4013583b02c
+      created: 1771437346039
+      modified: 1771437353826
+      isPrivate: false
+      description: ""
+      sortKey: -1734427679818
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: ""
+    name: POST ORDER (LOW ORDER for ALICE)
+    meta:
+      id: req_d6929371c439418b9b8f89855dafea86
+      created: 1771437607332
+      modified: 1771437678474
+      isPrivate: false
+      description: ""
+      sortKey: -1734427679718
+    method: GET
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "accountId": "{{alice_id}}",
+          "priceLimitUsdPerBtc": 1,
+          "amountBtc": 0.00001
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: ""
+    name: POST ORDER (HIGH ORDER for ALICE)
+    meta:
+      id: req_3c2eaf9f91d242a1bbd97db81fa359c2
+      created: 1771437654907
+      modified: 1771437694846
+      isPrivate: false
+      description: ""
+      sortKey: -1734427679668
+    method: GET
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "accountId": "{{alice_id}}",
+          "priceLimitUsdPerBtc": 1000000,
+          "amountBtc": 0.00001
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/accounts/{{alice_id}}
+    name: GET ACCOUNTS/ALICE
+    meta:
+      id: req_31aafcec9fa64fef928744a64ca52856
+      created: 1771437776789
+      modified: 1771437807766
+      isPrivate: false
+      description: ""
+      sortKey: -1734427679893
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/10.2.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/accounts/{{alice_id}}
+    name: GET ACCOUNTS/ALICE
+    meta:
+      id: req_da28182039e5441ab1f83ce0bf7ac3e4
+      created: 1771437783823
+      modified: 1771437811291
+      isPrivate: false
+      description: ""
+      sortKey: -1734427679568
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/10.2.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1734427654990
+    modified: 1771437582703
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1734427654910
+    modified: 1771437582704
+    isPrivate: false
+  data:
+    alice_id: 2c384d4f-e030-46c7-a591-3c82ab43ca8c
+    bob_id: e2ac9389-0f6d-46a5-a6ef-95c9b4f2cc01
