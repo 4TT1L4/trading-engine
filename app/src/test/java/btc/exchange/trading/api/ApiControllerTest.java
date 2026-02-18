@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class ApiControllerTest {
 
+  private static final String CTX = "/api";
+
   @Autowired MockMvc mvc;
   @Autowired ObjectMapper om;
 
@@ -24,14 +26,18 @@ class ApiControllerTest {
   void createAccount_validationError_returns400() throws Exception {
     String body = "{\"name\":\"\",\"usdBalance\":10}";
 
-    mvc.perform(post("/api/accounts").contentType(MediaType.APPLICATION_JSON).content(body))
+    mvc.perform(
+            post("/accounts")
+                .contextPath(CTX)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
   }
 
   @Test
   void orderStatusFilter_invalidStatus_returns400() throws Exception {
-    mvc.perform(get("/api/orders").param("status", "nope"))
+    mvc.perform(get("/orders").contextPath(CTX).param("status", "nope"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("INVALID_STATUS"));
   }
@@ -45,7 +51,11 @@ class ApiControllerTest {
     var accJson = om.writeValueAsString(accReq);
 
     var accRes =
-        mvc.perform(post("/api/accounts").contentType(MediaType.APPLICATION_JSON).content(accJson))
+        mvc.perform(
+                post("/accounts")
+                    .contextPath(CTX)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(accJson))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").isNotEmpty())
             .andReturn()
@@ -62,7 +72,11 @@ class ApiControllerTest {
     var ordJson = om.writeValueAsString(ordReq);
 
     var ordRes =
-        mvc.perform(post("/api/orders").contentType(MediaType.APPLICATION_JSON).content(ordJson))
+        mvc.perform(
+                post("/orders")
+                    .contextPath(CTX)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(ordJson))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.status").value("OPEN"))
             .andReturn()
@@ -72,7 +86,7 @@ class ApiControllerTest {
     var orderId = om.readTree(ordRes).get("id").asText();
 
     // fetch order
-    mvc.perform(get("/api/orders/" + orderId))
+    mvc.perform(get("/orders/" + orderId).contextPath(CTX))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(orderId))
         .andExpect(jsonPath("$.accountId").value(accId));
@@ -80,7 +94,7 @@ class ApiControllerTest {
 
   @Test
   void getMissingOrder_returns400WithDomainError() throws Exception {
-    mvc.perform(get("/api/orders/does-not-exist"))
+    mvc.perform(get("/orders/does-not-exist").contextPath(CTX))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
   }
