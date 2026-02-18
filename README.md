@@ -17,7 +17,7 @@ Spring Boot (Gradle) application implementing a simple in-memory trading
 system with accounts and limit BUY orders. Designed to be safe under
 concurrent requests.
 
-## Run
+## Running the application
 
 The project uses Docker Compose via Make:
 
