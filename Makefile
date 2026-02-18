@@ -35,4 +35,5 @@ clean:
 	docker system prune -f
 
 fmt:
-	cd app && ./gradlew spotlessApply
+	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle spotlessApply --no-daemon
+
