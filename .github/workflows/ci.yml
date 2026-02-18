@@ -8,14 +8,16 @@ on:
 jobs:
   compose-test:
     runs-on: ubuntu-latest
+    env:
+      EXCHANGE_FILL_WORKER_ENABLED: "false"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build and start services
         run: |
-          EXCHANGE_FILL_WORKER_ENABLED=false docker compose up -d --build
-          EXCHANGE_FILL_WORKER_ENABLED=false docker compose ps
+          docker compose up -d --build
+          docker compose ps
 
       - name: Wait for dependencies
         run: |
@@ -23,7 +25,7 @@ jobs:
 
       - name: Run tests in app container
         run: |
-          EXCHANGE_FILL_WORKER_ENABLED=false docker compose exec -T app gradle clean test --no-daemon --info
+          docker compose exec -T app gradle clean test --no-daemon --info
 
       - name: Print logs on failure
         if: failure()
