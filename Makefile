@@ -33,3 +33,6 @@ ps:
 clean:
 	docker compose down --volumes --remove-orphans
 	docker system prune -f
+
+fmt:
+	cd app && ./gradlew spotlessApply

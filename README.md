@@ -7,6 +7,10 @@
 ![Concurrency](https://img.shields.io/badge/concurrency-safe-blueviolet)
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-Swagger-green)
 ![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=4TT1L4_trading-engine&metric=coverage)](https://sonarcloud.io/summary/new_code?id=4TT1L4_trading-engine)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=4TT1L4_trading-engine&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=4TT1L4_trading-engine)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=4TT1L4_trading-engine&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=4TT1L4_trading-engine)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=4TT1L4_trading-engine&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=4TT1L4_trading-engine)
 
 Spring Boot (Gradle) application implementing a simple in-memory trading
 system with accounts and limit BUY orders. Designed to be safe under
@@ -27,6 +31,8 @@ Logs: `make logs`
 Clean: `make clean`
 
 App runs at: http://localhost:8080
+
+Swagger UI: http://localhost:8080/api/swagger-ui/index.html
 
 ## API tests
 
@@ -52,6 +58,16 @@ Import it and run requests against: http://localhost:8080
     status\
 -   `POST /api/orders/fill?price=...` --- execute eligible orders at a
     given market price
+
+## Tests
+
+Automated tests are executed during the Docker build.
+
+Rebuild the image to run tests:
+
+`make rebuild`
+
+The build fails if any test fails.
 
 ## Design Decisions
 

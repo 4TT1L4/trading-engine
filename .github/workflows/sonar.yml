@@ -37,6 +37,9 @@ jobs:
       - name: Make gradlew executable
         working-directory: app
         run: chmod +x ./gradlew
+      - name: Formatting check
+        working-directory: app
+        run: ./gradlew spotlessCheck --no-daemon --console=plain
       - name: Build + Sonar analysis
         working-directory: app
         env:
