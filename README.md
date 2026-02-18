@@ -1,5 +1,13 @@
 # In-Memory Trading Engine
 
+![CI](https://github.com/4TT1L4/trading-engine/actions/workflows/ci.yml/badge.svg)
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen)
+![Gradle](https://img.shields.io/badge/Gradle-8.x-blue)
+![Concurrency](https://img.shields.io/badge/concurrency-safe-blueviolet)
+![OpenAPI](https://img.shields.io/badge/OpenAPI-Swagger-green)
+![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue)
+
 Spring Boot (Gradle) application implementing a simple in-memory trading
 system with accounts and limit BUY orders. Designed to be safe under
 concurrent requests.
