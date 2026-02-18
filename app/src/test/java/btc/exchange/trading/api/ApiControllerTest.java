@@ -27,7 +27,7 @@ class ApiControllerTest {
     String body = "{\"name\":\"\",\"usdBalance\":10}";
 
     mvc.perform(
-            post("/accounts")
+            post("/api/accounts")
                 .contextPath(CTX)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
@@ -37,7 +37,7 @@ class ApiControllerTest {
 
   @Test
   void orderStatusFilter_invalidStatus_returns400() throws Exception {
-    mvc.perform(get("/orders").contextPath(CTX).param("status", "nope"))
+    mvc.perform(get("/api/orders").contextPath(CTX).param("status", "nope"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("INVALID_STATUS"));
   }
@@ -52,7 +52,7 @@ class ApiControllerTest {
 
     var accRes =
         mvc.perform(
-                post("/accounts")
+                post("/api/accounts")
                     .contextPath(CTX)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(accJson))
@@ -73,7 +73,7 @@ class ApiControllerTest {
 
     var ordRes =
         mvc.perform(
-                post("/orders")
+                post("/api/orders")
                     .contextPath(CTX)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(ordJson))
@@ -86,7 +86,7 @@ class ApiControllerTest {
     var orderId = om.readTree(ordRes).get("id").asText();
 
     // fetch order
-    mvc.perform(get("/orders/" + orderId).contextPath(CTX))
+    mvc.perform(get("/api/orders/" + orderId).contextPath(CTX))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(orderId))
         .andExpect(jsonPath("$.accountId").value(accId));
@@ -94,7 +94,7 @@ class ApiControllerTest {
 
   @Test
   void getMissingOrder_returns400WithDomainError() throws Exception {
-    mvc.perform(get("/orders/does-not-exist").contextPath(CTX))
+    mvc.perform(get("/api/orders/does-not-exist").contextPath(CTX))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
   }
