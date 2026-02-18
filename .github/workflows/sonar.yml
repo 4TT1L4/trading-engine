@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Make gradlew executable
         working-directory: app
-        run: chmod +x gradlew
+        run: chmod +x ./gradlew
       - name: Build + Sonar analysis
         working-directory: app
         env:
