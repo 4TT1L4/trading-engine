@@ -75,7 +75,7 @@ class SmokeTest {
         );
 
         int filled = orderService.fillEligibleOrders(new BigDecimal("29000"));
-        assertThat(filled).isEqualTo(0);
+        assertThat(filled).isZero();
 
         Order updated = orderService.getOrderById(order.id().value());
         assertThat(updated.status()).isEqualTo(OrderStatus.OPEN);
