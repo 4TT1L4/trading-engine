@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
+    id "org.sonarqube" version "7.1.0.6387"
 }
 
 group = 'btc.exchange'
@@ -25,3 +26,10 @@ dependencies {
 }
 
 tasks.named('test') { useJUnitPlatform() }
+
+sonar {
+  properties {
+    property "sonar.projectKey", "4TT1L4_trading-engine"
+    property "sonar.organization", "bujakiattila"
+  }
+}
