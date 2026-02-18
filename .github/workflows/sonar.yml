@@ -41,4 +41,4 @@ jobs:
         working-directory: app
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew clean test sonar --no-daemon --console=plain --info
+        run: ./gradlew clean test jacocoTestReport sonar --no-daemon --console=plain --info

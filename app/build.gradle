@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
     id "org.sonarqube" version "7.1.0.6387"
+    id 'jacoco' // <-- add
 }
 
 group = 'btc.exchange'
@@ -25,11 +26,30 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.named('test') { useJUnitPlatform() }
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy tasks.jacocoTestReport // <-- add: generate report after tests
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true   // <-- Sonar needs XML
+        html.required = true  // <-- nice to have locally
+    }
+}
 
 sonar {
-  properties {
-    property "sonar.projectKey", "4TT1L4_trading-engine"
-    property "sonar.organization", "bujakiattila"
-  }
+    properties {
+        property "sonar.projectKey", "4TT1L4_trading-engine"
+        property "sonar.organization", "bujakiattila"
+
+        // <-- add: point Sonar to the JaCoCo XML report
+        property "sonar.coverage.jacoco.xmlReportPaths",
+                "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }
