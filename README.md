@@ -14,7 +14,7 @@ Rebuild: `make rebuild`
 
 Stop: `make down`
 
-Logs: `make logs make logs-app make logs-exchange`
+Logs: `make logs`
 
 Clean: `make clean`
 

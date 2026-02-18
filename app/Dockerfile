@@ -7,7 +7,7 @@ COPY gradle ./gradle
 RUN gradle dependencies --no-daemon || true
 
 COPY src ./src
-RUN gradle bootJar --no-daemon
+RUN gradle clean test bootJar --no-daemon --info
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre-jammy
