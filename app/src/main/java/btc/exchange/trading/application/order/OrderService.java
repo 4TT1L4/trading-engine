@@ -16,7 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class OrderService {
 
-    private final static String ORDER_NOT_FOUND = "ORDER_NOT_FOUND";
+    private static final String ORDER_NOT_FOUND = "ORDER_NOT_FOUND";
+    private static final String ORDER_NOT_FOUND_TEXT = "Order not found";
 
     private final OrderRepository orderRepository;
     private final AccountService accountService;
@@ -69,7 +70,7 @@ public class OrderService {
 
     public Order getOrderById(String orderId) {
         return orderRepository.findById(new OrderId(orderId))
-                .orElseThrow(() -> new DomainException(ORDER_NOT_FOUND, "Order not found: " + orderId));
+                .orElseThrow(() -> new DomainException(ORDER_NOT_FOUND, ORDER_NOT_FOUND_TEXT + ": " + orderId));
     }
 
     /**
@@ -103,7 +104,7 @@ public class OrderService {
         var claimed = orderRepository.update(orderId, existing -> {
             if (existing.status() != OrderStatus.OPEN) return existing;
             return existing.withStatus(OrderStatus.EXECUTING);
-        }).orElseThrow(() -> new DomainException(ORDER_NOT_FOUND, "Order not found: " + orderId.value()));
+        }).orElseThrow(() -> new DomainException(ORDER_NOT_FOUND, ORDER_NOT_FOUND_TEXT + ": " + orderId.value()));
     
         if (claimed.status() != OrderStatus.EXECUTING) return false;
     
@@ -140,7 +141,7 @@ public class OrderService {
         var finalized = orderRepository.update(orderId, o -> {
             if (o.status() != OrderStatus.EXECUTING) return o;
             return o.withStatus(OrderStatus.FILLED);
-        }).orElseThrow(() -> new DomainException(ORDER_NOT_FOUND, "Order not found: " + orderId.value()));
+        }).orElseThrow(() -> new DomainException(ORDER_NOT_FOUND, ORDER_NOT_FOUND_TEXT + ": " + orderId.value()));
     
         return finalized.status() == OrderStatus.FILLED;
     }
