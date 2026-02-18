@@ -14,8 +14,8 @@ jobs:
 
       - name: Build and start services
         run: |
-          docker compose up -d --build
-          docker compose ps
+          EXCHANGE_FILL_WORKER_ENABLED=false docker compose up -d --build
+          EXCHANGE_FILL_WORKER_ENABLED=false docker compose ps
 
       - name: Wait for dependencies
         run: |
@@ -23,7 +23,7 @@ jobs:
 
       - name: Run tests in app container
         run: |
-          docker compose exec -T app gradle clean test --no-daemon --info
+          EXCHANGE_FILL_WORKER_ENABLED=false docker compose exec -T app gradle clean test --no-daemon --info
 
       - name: Print logs on failure
         if: failure()
