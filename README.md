@@ -45,18 +45,18 @@ Import it and run requests against: http://localhost:8080
 
 ### Accounts
 
--   `POST /api/accounts` --- create a new account with initial balances\
--   `GET /api/accounts` --- list all accounts\
+-   `POST /api/accounts` --- create a new account with initial balances
+-   `GET /api/accounts` --- list all accounts
 -   `GET /api/accounts/{accountId}` --- retrieve a specific account by
     id
 
 ### Orders
 
--   `POST /api/orders` --- create a new limit BUY order\
--   `GET /api/orders` --- list all orders\
--   `GET /api/orders/{orderId}` --- retrieve an order by id\
+-   `POST /api/orders` --- create a new limit BUY order
+-   `GET /api/orders` --- list all orders
+-   `GET /api/orders/{orderId}` --- retrieve an order by id
 -   `GET /api/orders?status=OPEN|EXECUTING|FILLED` --- filter orders by
-    status\
+    status
 -   `POST /api/orders/fill?price=...` --- execute eligible orders at a
     given market price
 
@@ -72,23 +72,23 @@ The build fails if any test fails.
 
 ## Design Decisions
 
--   **In-memory storage**\
+-   **In-memory storage**
     The system uses in-memory repositories to keep the focus on business
     logic and concurrency rather than persistence.
 
--   **Immutable domain models**\
+-   **Immutable domain models**
     `Account` and `Order` are implemented as immutable records to avoid
     shared mutable state and simplify thread safety.
 
--   **Thread-safe repositories**\
+-   **Thread-safe repositories**
     Repositories use `ConcurrentHashMap` with atomic updates
     (`computeIfPresent`) to ensure safe concurrent access.
 
--   **Per-account synchronization**\
+-   **Per-account synchronization**
     A lock per account prevents double spending when multiple orders are
     executed concurrently.
 
--   **Order lifecycle state machine**\
+-   **Order lifecycle state machine**
     Orders transition through:
 
         OPEN → EXECUTING → FILLED
@@ -96,7 +96,7 @@ The build fails if any test fails.
     This ensures an order can only be executed once and prevents race
     conditions.
 
--   **Worker controlled via configuration**\
+-   **Worker controlled via configuration**
     Background order filling can be enabled/disabled using configuration
     (`EXCHANGE_FILL_WORKER_ENABLED`), allowing deterministic test runs.
 
