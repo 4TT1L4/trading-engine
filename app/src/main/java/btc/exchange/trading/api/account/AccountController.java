@@ -9,11 +9,13 @@ import btc.exchange.trading.application.order.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@Tag(name = "Accounts")
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/accounts")
 public class AccountController {
 
     private final AccountService accountService;
