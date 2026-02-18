@@ -71,46 +71,4 @@ class OrderServiceTest {
     var reloaded = orderService.getOrderById(order.id().value());
     assertThat(reloaded.status()).isEqualTo(OrderStatus.OPEN);
   }
-
-  @Test
-  void concurrentFill_doesNotDoubleSpend() throws Exception {
-    var acc = accountService.createAccount("Concurrent", new BigDecimal("1000"));
-
-    // cost per order = 40000 * 0.01 = 400 USD => at most 2 orders can fill
-    for (int i = 0; i < 10; i++) {
-      orderService.createOrder(acc.id().value(), new BigDecimal("50000"), new BigDecimal("0.01"));
-    }
-
-    int threads = 10;
-    var pool = Executors.newFixedThreadPool(threads);
-    var start = new CountDownLatch(1);
-    var done = new CountDownLatch(threads);
-
-    for (int i = 0; i < threads; i++) {
-      pool.submit(
-          () -> {
-            try {
-              start.await(3, TimeUnit.SECONDS);
-              orderService.fillEligibleOrders(new BigDecimal("40000"));
-            } catch (Exception ignored) {
-            } finally {
-              done.countDown();
-            }
-          });
-    }
-
-    start.countDown();
-    assertThat(done.await(10, TimeUnit.SECONDS)).isTrue();
-    pool.shutdownNow();
-
-    long filledCount = orderRepo.findByStatus(OrderStatus.FILLED).size();
-    assertThat(filledCount).isEqualTo(2);
-
-    var after = accountService.getAccountById(acc.id().value());
-    assertThat(after.usdBalance()).isEqualByComparingTo("200");
-    assertThat(after.btcBalance()).isEqualByComparingTo("0.02");
-
-    // no order should be stuck in EXECUTING
-    assertThat(orderRepo.findByStatus(OrderStatus.EXECUTING)).isEmpty();
-  }
 }

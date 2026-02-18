@@ -1,7 +1,7 @@
 # ---------- Build stage ----------
 FROM gradle:8.7-jdk21 AS builder
 
-ARG EXCHANGE_FILL_WORKER_ENABLED=true
+ARG EXCHANGE_FILL_WORKER_ENABLED=false
 ENV EXCHANGE_FILL_WORKER_ENABLED=$EXCHANGE_FILL_WORKER_ENABLED
 
 WORKDIR /app
@@ -14,6 +14,9 @@ RUN gradle clean test bootJar --no-daemon --info
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre-jammy
+
+ARG EXCHANGE_FILL_WORKER_ENABLED=true
+ENV EXCHANGE_FILL_WORKER_ENABLED=$EXCHANGE_FILL_WORKER_ENABLED
 
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
