@@ -67,8 +67,6 @@ Import it and run requests against: http://localhost:8080/api
 -   `GET /api/orders/{orderId}` --- retrieve an order by id
 -   `GET /api/orders?status=OPEN|EXECUTING|FILLED` --- filter orders by
     status
--   `POST /api/orders/fill?price=...` --- execute eligible orders at a
-    given market price
 
 ## Tests
 
