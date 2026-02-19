@@ -41,13 +41,15 @@ Clean: `make clean`
 
 App runs at: http://localhost:8080
 
+API endpoints: http://localhost:8080/api
+
 Swagger UI: http://localhost:8080/api/swagger-ui/index.html
 
 ## API tests
 
 An Insomnia collection is included (`insomnia-tests.yaml`).
 
-Import it and run requests against: http://localhost:8080
+Import it and run requests against: http://localhost:8080/api
 
 ## Available Endpoints
 
