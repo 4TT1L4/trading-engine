@@ -21,6 +21,14 @@ concurrent requests.
 
 The project uses Docker Compose via Make:
 
+``` bash
+git clone git@github.com:4TT1L4/trading-engine.git
+cd trading-engine
+make up
+```
+
+Other commands:
+
 Start: `make up`
 
 Rebuild: `make rebuild`
