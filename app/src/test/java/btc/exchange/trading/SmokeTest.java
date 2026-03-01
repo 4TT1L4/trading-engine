@@ -1,10 +1,12 @@
 package btc.exchange.trading;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import btc.exchange.trading.application.account.AccountService;
 import btc.exchange.trading.application.order.OrderService;
 import btc.exchange.trading.domain.account.Account;
+import btc.exchange.trading.domain.common.DomainException;
 import btc.exchange.trading.domain.order.Order;
 import btc.exchange.trading.domain.order.OrderStatus;
 import java.math.BigDecimal;
@@ -44,28 +46,22 @@ class SmokeTest {
     Order updated = orderService.getOrderById(order.id().value());
     assertThat(updated.status()).isEqualTo(OrderStatus.FILLED);
 
-    // verify account balances changed
+    // USD was locked at order creation (30000*0.1=3000); fill only adds BTC
     Account after = accountService.getAccountById(account.id().value());
-    BigDecimal expectedUsd =
-        new BigDecimal("10000").subtract(new BigDecimal("29000").multiply(new BigDecimal("0.1")));
-
-    assertThat(after.usdBalance()).isEqualByComparingTo(expectedUsd);
+    assertThat(after.usdBalance()).isEqualByComparingTo("7000");
     assertThat(after.btcBalance()).isEqualByComparingTo("0.1");
   }
 
   @Test
-  void orderNotFilled_whenInsufficientFunds() {
+  void createOrder_rejectsWhenInsufficientFunds() {
     Account account = accountService.createAccount("low-funds", new BigDecimal("100"));
-
-    Order order =
-        orderService.createOrder(
-            account.id().value(), new BigDecimal("30000"), new BigDecimal("0.1"));
-
-    int filled = orderService.fillEligibleOrders(new BigDecimal("29000"));
-    assertThat(filled).isZero();
-
-    Order updated = orderService.getOrderById(order.id().value());
-    assertThat(updated.status()).isEqualTo(OrderStatus.OPEN);
+    // Order would need 30000*0.1 = 3000 USD; account has only 100
+    assertThatThrownBy(
+            () ->
+                orderService.createOrder(
+                    account.id().value(), new BigDecimal("30000"), new BigDecimal("0.1")))
+        .isInstanceOf(DomainException.class)
+        .hasMessageContaining("Insufficient USD balance");
 
     Account after = accountService.getAccountById(account.id().value());
     assertThat(after.usdBalance()).isEqualByComparingTo("100");

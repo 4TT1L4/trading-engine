@@ -98,4 +98,34 @@ class ApiControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
   }
+
+  @Test
+  void createOrder_insufficientFunds_returns400() throws Exception {
+    var accReq = new LinkedHashMap<String, Object>();
+    accReq.put("name", "poor");
+    accReq.put("usdBalance", new BigDecimal("50"));
+    var accRes =
+        mvc.perform(
+                post("/api/accounts")
+                    .contextPath(CTX)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsString(accReq)))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+    var accId = om.readTree(accRes).get("id").asText();
+
+    var ordReq = new LinkedHashMap<String, Object>();
+    ordReq.put("accountId", accId);
+    ordReq.put("priceLimitUsdPerBtc", new BigDecimal("30000"));
+    ordReq.put("amountBtc", new BigDecimal("0.01"));
+    mvc.perform(
+            post("/api/orders")
+                .contextPath(CTX)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(ordReq)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("INSUFFICIENT_FUNDS"));
+  }
 }

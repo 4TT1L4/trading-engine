@@ -1,0 +1,63 @@
+# Bin / build outputs
+bin/
+**/bin/
+out/
+**/out/
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+*.egg
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local / env
+.env
+.env.local
+*.local
+
+# Test / coverage
+coverage/
+.coverage
+htmlcov/
+.jacoco/
+*.exec
+
+# Misc
+*.log
+*.tmp
+*.temp
+.cache/

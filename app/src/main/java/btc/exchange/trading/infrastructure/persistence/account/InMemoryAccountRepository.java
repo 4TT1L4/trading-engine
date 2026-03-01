@@ -2,7 +2,8 @@ package btc.exchange.trading.infrastructure.persistence.account;
 
 import btc.exchange.trading.domain.account.Account;
 import btc.exchange.trading.domain.account.AccountId;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.UnaryOperator;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 
   @Override
   public List<Account> findAll() {
-    return new LinkedList<>(accounts.values());
+    return accounts.values().stream().toList();
   }
 
   @Override

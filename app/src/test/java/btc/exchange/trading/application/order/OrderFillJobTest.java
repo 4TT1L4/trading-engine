@@ -11,7 +11,7 @@ class OrderFillJobTest {
 
   @Test
   void pollAndFill_doesNothingWhenWorkerDisabled() {
-    var props = new AppProperties("http://x", 1000L, false);
+    var props = new AppProperties("http://x", 1000L, false, 4);
     var mdc = mock(MarketDataClient.class);
     var svc = mock(OrderService.class);
 
@@ -24,7 +24,7 @@ class OrderFillJobTest {
 
   @Test
   void pollAndFill_callsMarketDataAndFillsWhenEnabled() {
-    var props = new AppProperties("http://x", 1000L, true);
+    var props = new AppProperties("http://x", 1000L, true, 4);
     var mdc = mock(MarketDataClient.class);
     var svc = mock(OrderService.class);
 

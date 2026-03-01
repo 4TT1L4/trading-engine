@@ -37,3 +37,9 @@ clean:
 fmt:
 	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle spotlessApply --no-daemon
 
+test:
+	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle test --no-daemon
+
+build:
+	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle clean test bootJar --no-daemon
+

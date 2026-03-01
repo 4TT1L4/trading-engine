@@ -4,7 +4,9 @@ import btc.exchange.trading.domain.account.AccountId;
 import btc.exchange.trading.domain.order.Order;
 import btc.exchange.trading.domain.order.OrderId;
 import btc.exchange.trading.domain.order.OrderStatus;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.UnaryOperator;
 import org.springframework.stereotype.Repository;
@@ -27,12 +29,20 @@ public class InMemoryOrderRepository implements OrderRepository {
 
   @Override
   public List<Order> findAll() {
-    return new LinkedList<>(orders.values());
+    return orders.values().stream().toList();
   }
 
+  /**
+   * Returns orders with the given status. OPEN orders are returned sorted by price ascending
+   * (lowest price first) to support fill-order optimization and early exit when market price is
+   * exceeded.
+   */
   @Override
   public List<Order> findByStatus(OrderStatus status) {
-    return orders.values().stream().filter(o -> o.status() == status).toList();
+    var filtered = orders.values().stream().filter(o -> o.status() == status);
+    return status == OrderStatus.OPEN
+        ? filtered.sorted(Comparator.comparing(Order::priceLimitUsdPerBtc)).toList()
+        : filtered.toList();
   }
 
   @Override
