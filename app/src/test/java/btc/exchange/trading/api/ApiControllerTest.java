@@ -93,9 +93,9 @@ class ApiControllerTest {
   }
 
   @Test
-  void getMissingOrder_returns400WithDomainError() throws Exception {
+  void getMissingOrder_returns404WithDomainError() throws Exception {
     mvc.perform(get("/api/orders/does-not-exist").contextPath(CTX))
-        .andExpect(status().isBadRequest())
+        .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
   }
 
