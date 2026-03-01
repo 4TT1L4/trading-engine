@@ -35,9 +35,7 @@ public class OrderService implements DisposableBean {
 
   @Autowired
   public OrderService(
-      OrderRepository orderRepository,
-      AccountService accountService,
-      AppProperties appProperties) {
+      OrderRepository orderRepository, AccountService accountService, AppProperties appProperties) {
     this.orderRepository = orderRepository;
     this.accountService = accountService;
     this.fillExecutor =
@@ -52,9 +50,7 @@ public class OrderService implements DisposableBean {
 
   /** Constructor for tests: inject a custom executor. */
   public OrderService(
-      OrderRepository orderRepository,
-      AccountService accountService,
-      ExecutorService fillExecutor) {
+      OrderRepository orderRepository, AccountService accountService, ExecutorService fillExecutor) {
     this.orderRepository = orderRepository;
     this.accountService = accountService;
     this.fillExecutor = fillExecutor;
@@ -116,10 +112,7 @@ public class OrderService implements DisposableBean {
   }
 
   public List<Order> listOrdersByStatus(String status) {
-    OrderStatus st =
-        parseOrderStatus(status)
-            .orElseThrow(
-                () -> new DomainException("INVALID_STATUS", "Unknown status: " + status));
+    OrderStatus st = parseOrderStatus(status).orElseThrow(() -> new DomainException("INVALID_STATUS", "Unknown status: " + status));
     return orderRepository.findByStatus(st);
   }
 

@@ -16,8 +16,7 @@ public class ApiExceptionHandler {
 
   @ExceptionHandler(DomainException.class)
   public ResponseEntity<ErrorResponse> handleDomain(DomainException ex) {
-    boolean notFound =
-        "ACCOUNT_NOT_FOUND".equals(ex.code()) || "ORDER_NOT_FOUND".equals(ex.code());
+    boolean notFound = "ACCOUNT_NOT_FOUND".equals(ex.code()) || "ORDER_NOT_FOUND".equals(ex.code());
     HttpStatus status = notFound ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
     return ResponseEntity.status(status).body(ErrorResponse.of(ex.code(), ex.getMessage()));
   }
