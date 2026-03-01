@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build-image:
+  docker-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,7 +42,7 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-  spotless:
+  formatting-checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -62,7 +62,7 @@ jobs:
         working-directory: app
         run: ./gradlew spotlessCheck --no-daemon --console=plain
 
-  sonar:
+  sonar-report:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
