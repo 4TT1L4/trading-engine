@@ -1,4 +1,4 @@
-.PHONY: clean down down-test logs logs-app logs-exchange ps rebuild rebuild-nocache restart-app test test-e2e up
+.PHONY: clean down down-test logs logs-app logs-exchange ps rebuild rebuild-nocache restart-app test test-e2e up fmt test build
 
 up:
 	docker compose up
@@ -34,12 +34,14 @@ clean:
 	docker compose down --volumes --remove-orphans
 	docker system prune -f
 
+# MSYS_NO_PATHCONV=1 stops Git Bash from converting paths (e.g. /app -> C:/Program Files/Git/app)
+# See https://andydote.co.uk/2018/06/18/git-bash-docker-volume-paths/
 fmt:
-	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle spotlessApply --no-daemon
+	MSYS_NO_PATHCONV=1 docker run --rm -v "$(CURDIR)/app:/app" -w /app gradle:8.7-jdk21 gradle spotlessApply --no-daemon
 
 test:
-	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle test --no-daemon
+	MSYS_NO_PATHCONV=1 docker run --rm -v "$(CURDIR)/app:/app" -w /app gradle:8.7-jdk21 gradle test --no-daemon
 
 build:
-	docker run --rm -v "$(shell pwd -W)/app:/app" -w /app gradle:8.7-jdk21 gradle clean test bootJar --no-daemon
+	MSYS_NO_PATHCONV=1 docker run --rm -v "$(CURDIR)/app:/app" -w /app gradle:8.7-jdk21 gradle clean test bootJar --no-daemon
 

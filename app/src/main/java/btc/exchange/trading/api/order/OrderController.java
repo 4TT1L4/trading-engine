@@ -46,6 +46,7 @@ public class OrderController {
   }
 
   private OrderResponse toResponse(Order o) {
-    return new OrderResponse(o.id().value(), o.accountId().value(), o.priceLimitUsdPerBtc(), o.amountBtc(), o.status());
+    return new OrderResponse(
+        o.id().value(), o.accountId().value(), o.priceLimitUsdPerBtc(), o.amountBtc(), o.status());
   }
 }

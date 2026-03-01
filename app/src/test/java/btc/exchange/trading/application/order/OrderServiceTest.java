@@ -21,8 +21,7 @@ class OrderServiceTest {
   private static final ExecutorService fillExecutor = Executors.newFixedThreadPool(4);
 
   private final InMemoryOrderRepository orderRepo = new InMemoryOrderRepository();
-  private final AccountService accountService =
-      new AccountService(new InMemoryAccountRepository());
+  private final AccountService accountService = new AccountService(new InMemoryAccountRepository());
   private final OrderService orderService =
       new OrderService(orderRepo, accountService, fillExecutor);
 
@@ -157,9 +156,10 @@ class OrderServiceTest {
     int filled = orderService.fillEligibleOrders(new BigDecimal("30000"));
     assertThat(filled).isEqualTo(2);
 
-    var open = orderService.getOrdersForAccount(acc.id().value()).stream()
-        .filter(o -> o.status() == OrderStatus.OPEN)
-        .toList();
+    var open =
+        orderService.getOrdersForAccount(acc.id().value()).stream()
+            .filter(o -> o.status() == OrderStatus.OPEN)
+            .toList();
     assertThat(open).hasSize(1);
     assertThat(open.get(0).priceLimitUsdPerBtc()).isEqualByComparingTo("29000");
     assertThat(accountService.getAccountById(acc.id().value()).btcBalance())

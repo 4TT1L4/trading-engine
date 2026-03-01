@@ -50,7 +50,9 @@ public class OrderService implements DisposableBean {
 
   /** Constructor for tests: inject a custom executor. */
   public OrderService(
-      OrderRepository orderRepository, AccountService accountService, ExecutorService fillExecutor) {
+      OrderRepository orderRepository,
+      AccountService accountService,
+      ExecutorService fillExecutor) {
     this.orderRepository = orderRepository;
     this.accountService = accountService;
     this.fillExecutor = fillExecutor;
@@ -112,7 +114,9 @@ public class OrderService implements DisposableBean {
   }
 
   public List<Order> listOrdersByStatus(String status) {
-    OrderStatus st = parseOrderStatus(status).orElseThrow(() -> new DomainException("INVALID_STATUS", "Unknown status: " + status));
+    OrderStatus st =
+        parseOrderStatus(status)
+            .orElseThrow(() -> new DomainException("INVALID_STATUS", "Unknown status: " + status));
     return orderRepository.findByStatus(st);
   }
 
@@ -150,8 +154,7 @@ public class OrderService implements DisposableBean {
             .map(
                 ordersForAccount ->
                     fillExecutor.submit(
-                        () ->
-                            fillOrdersForAccount(ordersForAccount, currentPriceUsdPerBtc)))
+                        () -> fillOrdersForAccount(ordersForAccount, currentPriceUsdPerBtc)))
             .toList();
 
     try {
@@ -166,8 +169,7 @@ public class OrderService implements DisposableBean {
   }
 
   /** Process orders for one account in price order; fill when market <= limit. */
-  private int fillOrdersForAccount(
-      List<Order> ordersForAccount, BigDecimal currentPriceUsdPerBtc) {
+  private int fillOrdersForAccount(List<Order> ordersForAccount, BigDecimal currentPriceUsdPerBtc) {
     int filled = 0;
     for (Order o : ordersForAccount) {
       if (tryFill(o.id(), currentPriceUsdPerBtc)) {
@@ -207,9 +209,7 @@ public class OrderService implements DisposableBean {
 
   private void revertToOpen(OrderId orderId) {
     orderRepository.update(
-        orderId,
-        o ->
-            o.status() == OrderStatus.EXECUTING ? o.withStatus(OrderStatus.OPEN) : o);
+        orderId, o -> o.status() == OrderStatus.EXECUTING ? o.withStatus(OrderStatus.OPEN) : o);
   }
 
   private boolean applyFillAndFinalize(OrderId orderId, Order claimed) {
@@ -220,10 +220,7 @@ public class OrderService implements DisposableBean {
     return orderRepository
         .update(
             orderId,
-            o ->
-                o.status() == OrderStatus.EXECUTING
-                    ? o.withStatus(OrderStatus.FILLED)
-                    : o)
+            o -> o.status() == OrderStatus.EXECUTING ? o.withStatus(OrderStatus.FILLED) : o)
         .filter(o -> o.status() == OrderStatus.FILLED)
         .isPresent();
   }
